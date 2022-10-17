@@ -1,14 +1,17 @@
 package com.justinmtech.gameoflife;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Environment {
-    private boolean running = true;
     private final int size;
     private final int width;
-    private final int[][] environment;
+    private int[][] environment;
+    private List<int[][]> history;
     private int generation;
-    private final int[] rules = {0,1,0,0,1,0,1,1};
 
-    public Environment(int size, int width) {
+    public Environment(int size, int width, int generationDelay) {
+        history = new ArrayList<>();
         this.size = size;
         this.width = width;
         environment = new int[width][size];
@@ -16,8 +19,8 @@ public class Environment {
         int y = 0;
         while (y < size) {
             for (int x = 0; x < width; x++) {
-                int r = getRandomNumber(0, 10);
-                if (r == 9) {
+                int r = getRandomNumber(0, 2);
+                if (r == 1) {
                     environment[x][y] = 1;
                 } else {
                     environment[x][y] = 0;
@@ -27,7 +30,7 @@ public class Environment {
         }
         System.out.println("Generation: " + 0);
         displayEnvironment();
-        generateEnvironment();
+        generateEnvironment(generationDelay);
     }
 
     public int getRandomNumber(int min, int max) {
@@ -62,7 +65,7 @@ public class Environment {
         return cells;
     }
 
-    private void generateLine(int y) {
+    private int[] generateLine(int y) {
         int[] newGen = new int[width];
         int prev = y - 1;
         for (int x = 1; x < getCellsOnLine(y).length - 1; x++) {
@@ -81,24 +84,32 @@ public class Environment {
             if (prev + 1 < size) bottomRight = getCellsOnLine(prev + 1)[x + 1];
             int bottomLeft = 0;
             if (prev + 1 < size) bottomLeft = getCellsOnLine(prev + 1)[x - 1];
-            int neighbors[] = {topLeft, up, topRight, left, me, right, bottomLeft, down, bottomRight};
+            int neighbors[] = {topLeft, up, topRight, left, right, bottomLeft, down, bottomRight};
 
             newGen[x] = lifeOrDeath(me, neighbors);
-            if (y < size) {
-            environment[x][y] = newGen[x];
-            }
+            //if (y < size) {
+            //newEnvironment[x][y] = newGen[x];
+            //}
         }
+        return newGen;
     }
 
-    private void generateEnvironment() {
+    private void generateEnvironment(int delay) {
+        boolean running = true;
         while (running) {
-            for (int y = 1; y < size - 1; y++) {
-                generateLine(y);
+            int[][] newEnvironment = new int[width][size];
+            for (int y = 1; y < size; y++) {
+                int[] line = generateLine(y);
+                for (int x = 0; x < width; x++) {
+                    newEnvironment[x][y - 1] = line[x];
+                }
             }
+            history.add(environment);
+            environment = newEnvironment;
             System.out.println("Generation: " + generation);
             displayEnvironment();
             try {
-                Thread.sleep(300);
+                Thread.sleep(delay);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -111,13 +122,13 @@ public class Environment {
         for (int i : neighbors) if (i == 1) lifeCounter++;
 
         if (cell == 1 && lifeCounter < 2) return 0;
-        if (cell == 1 && lifeCounter <= 3) return 1;
-        if (cell == 1 && lifeCounter > 3) return 0;
-        if (cell == 0 && lifeCounter < 1) return 1;
-        return cell;
+        else if (cell == 1 && lifeCounter < 4) return 1;
+        else if (cell == 1 && lifeCounter > 3) return 0;
+        else if (cell == 0 && lifeCounter == 3) return 1;
+        return 0;
     }
 
     private String getCellDisplay(int state) {
-        return state == 1 ? "⬛" : "☐";
+        return state == 1 ? "*" : " ";
     }
 }
