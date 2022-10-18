@@ -9,42 +9,57 @@ public class GUI extends Canvas {
 
     public GUI(Environment environment) {
         this.environment = environment;
-        main();
     }
 
-    public GUI() {
-        main();
-    }
 
     public void main() {
         JFrame frame = new JFrame("Cellular Automata");
-        Canvas canvas = new GUI();
-        canvas.setSize(500, 500);
+        Canvas canvas = new GUI(environment);
+        canvas.setSize(1920, 1080);
         frame.add(canvas);
         frame.pack();
         frame.setVisible(true);
     }
 
     public void paint(Graphics g) {
-        //int y = 0;
-        //int generation = 0;
-       //while (generation < environment.getHistory().size() - 1) {
-            //for (int x = 0; x < environment.getWidth(); x++) {
-            //    int cell =  getCellInGeneration(generation, x, y);
-                //fillSquare(g, y, cell);
-                //g.fillRect(x, y, 1, 1);
-           // }
-            //y++;
-        //}
-        g.fillRect(0, 0, 1, 1);
+        int generation = 0;
+        while (generation < 1000) {
+            int y = 0;
+            while (y < environment.getHeight()) {
+                for (int x = 0; x < environment.getWidth() - 1; x++) {
+                    int cell = getCellInGeneration(generation, x, y);
+                    fillSquare(g, x, y, cell);
+                }
+                y++;
+            }
+            try {
+                Thread.sleep(40);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            generation++;
+        }
     }
 
-    private void fillSquare(Graphics g, int i, int[] cells) {
-        for (int j = 0; j < cells.length; j++) {
-            if (cells[j] == 1) {
-                g.fillRect(j, i, 1, 1);
-            }
+    private void fillSquare(Graphics g, int x, int y, int cell) {
+        if (cell == 1) {
+            g.clearRect(x, y, 1, 1);
+        } else {
+            g.fillRect(x, y, 1, 1);
         }
+    }
+
+    private void resetFrame(Graphics g) {
+        int width = 1920;
+        int height = 1080;
+        int currentHeight = 0;
+        while (currentHeight < height) {
+            for (int x = 0; x < width; x++) {
+                g.clearRect(x, currentHeight, 1, 1);
+            }
+            currentHeight++;
+        }
+
     }
 
     public Environment getEnvironment() {

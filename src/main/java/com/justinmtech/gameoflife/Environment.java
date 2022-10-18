@@ -18,7 +18,7 @@ public class Environment {
         this.height = height;
         this.width = width;
         this.generation = 1;
-        this.maxGeneration = 50;
+        this.maxGeneration = 250;
         this.cells = new int[width][height];
         initializeGame(generationDelay);
     }
@@ -38,7 +38,7 @@ public class Environment {
     private void initializeGame(int generationDelay) {
         printGeneration(0);
         generateRandomCells();
-        displayEnvironment();
+        //displayEnvironment();
         loopGameOfLife(generationDelay);
     }
 
@@ -50,7 +50,7 @@ public class Environment {
         int y = 0;
         while (y < getHeight()) {
             for (int x = 0; x < getWidth(); x++) {
-                int r = getNumberBetween(0, 5);
+                int r = getNumberBetween(0, 20);
                 if (r == 1) setCellState(x, y, 1);
                 else setCellState(x, y, 0);
             }
@@ -124,9 +124,9 @@ public class Environment {
             int[][] newEnvironment = generateNextEnvironment();
             addHistory(getCells());
             copyNewGenerationToCurrent(newEnvironment);
-            printGeneration(getGeneration());
-            displayEnvironment();
-            runDelay(delayInMilliseconds);
+            //printGeneration(getGeneration());
+            //displayEnvironment();
+            //runDelay(delayInMilliseconds);
             incrementGeneration();
         }
         printDoneMessage();
