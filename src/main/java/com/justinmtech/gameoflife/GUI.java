@@ -5,17 +5,23 @@ import java.awt.*;
 import java.util.List;
 
 public class GUI extends Canvas {
-    private Environment environment;
+    private final Environment environment;
+    private int frameRate;
 
     public GUI(Environment environment) {
         this.environment = environment;
+        this.frameRate = 25;
     }
 
+    private int convertFrameRateToMilliseconds() {
+        return (int) (getFrameRate() / 3.2808398950131);
+    }
 
-    public void main() {
-        JFrame frame = new JFrame("Cellular Automata");
+    public void run() {
+        JFrame frame = new JFrame("Conway's Game of Life");
         Canvas canvas = new GUI(environment);
-        canvas.setSize(1920, 1080);
+        canvas.setSize(environment.getWidth(), environment.getHeight());
+        canvas.setBackground(Color.BLACK);
         frame.add(canvas);
         frame.pack();
         frame.setVisible(true);
@@ -23,9 +29,9 @@ public class GUI extends Canvas {
 
     public void paint(Graphics g) {
         int generation = 0;
-        while (generation < 1000) {
+        while (generation < environment.getMaxGeneration() - 1) {
             int y = 0;
-            while (y < environment.getHeight()) {
+            while (y < environment.getHeight() - 1) {
                 for (int x = 0; x < environment.getWidth() - 1; x++) {
                     int cell = getCellInGeneration(generation, x, y);
                     fillSquare(g, x, y, cell);
@@ -33,7 +39,7 @@ public class GUI extends Canvas {
                 y++;
             }
             try {
-                Thread.sleep(40);
+                Thread.sleep(convertFrameRateToMilliseconds());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -43,27 +49,12 @@ public class GUI extends Canvas {
 
     private void fillSquare(Graphics g, int x, int y, int cell) {
         if (cell == 1) {
-            g.clearRect(x, y, 1, 1);
+            g.setColor(Color.GREEN);
+            g.fillRect(x, y, 1, 1);
         } else {
+            g.setColor(Color.BLACK);
             g.fillRect(x, y, 1, 1);
         }
-    }
-
-    private void resetFrame(Graphics g) {
-        int width = 1920;
-        int height = 1080;
-        int currentHeight = 0;
-        while (currentHeight < height) {
-            for (int x = 0; x < width; x++) {
-                g.clearRect(x, currentHeight, 1, 1);
-            }
-            currentHeight++;
-        }
-
-    }
-
-    public Environment getEnvironment() {
-        return environment;
     }
 
     private List<int[][]> getHistory() {
@@ -76,5 +67,13 @@ public class GUI extends Canvas {
 
     private int getCellInGeneration(int generation, int x, int y) {
         return getGeneration(generation)[x][y];
+    }
+
+    public int getFrameRate() {
+        return frameRate;
+    }
+
+    public void setFrameRate(int frameRate) {
+        this.frameRate = frameRate;
     }
 }

@@ -10,17 +10,15 @@ public class Environment {
     private final int maxGeneration;
     private int[][] cells;
     private final List<int[][]> history;
-    private final static String cellAlive = "*";
-    private final static String cellDead = " ";
 
-    public Environment(int height, int width, int generationDelay) {
+    public Environment(int height, int width, int maxGeneration) {
         this.history = new ArrayList<>();
         this.height = height;
         this.width = width;
         this.generation = 1;
-        this.maxGeneration = 250;
+        this.maxGeneration = maxGeneration;
         this.cells = new int[width][height];
-        initializeGame(generationDelay);
+        initializeGame();
     }
 
     public int getHeight() {
@@ -35,22 +33,17 @@ public class Environment {
         return history;
     }
 
-    private void initializeGame(int generationDelay) {
-        printGeneration(0);
+    private void initializeGame() {
         generateRandomCells();
-        //displayEnvironment();
-        loopGameOfLife(generationDelay);
-    }
-
-    private void printGeneration(int number) {
-        System.out.println("Generation: " + number);
+        loopGameOfLife();
     }
 
     private void generateRandomCells() {
         int y = 0;
         while (y < getHeight()) {
             for (int x = 0; x < getWidth(); x++) {
-                int r = getNumberBetween(0, 20);
+                int max = getNumberBetween(1, 50);
+                int r = getNumberBetween(0, max);
                 if (r == 1) setCellState(x, y, 1);
                 else setCellState(x, y, 0);
             }
@@ -65,26 +58,6 @@ public class Environment {
     private int getCell(int x, int y) {
         if ((x < 0 || x > getWidth() - 1) || (y < 0 || y > getHeight() - 1)) return 0;
         return cells[x][y];
-    }
-
-    private void displayEnvironment() {
-        int y = 0;
-        while (y < getHeight()) {
-            for (int[] ints : getCells()) {
-                int state = ints[y];
-                printCellDisplay(state);
-            }
-            printEmptyLine();
-            y++;
-        }
-    }
-
-    private void printCellDisplay(int state) {
-        System.out.print(getCellDisplay(state));
-    }
-
-    private void printEmptyLine() {
-        System.out.println();
     }
 
     private int[] generateLineOfCellsAtY(int y) {
@@ -119,28 +92,12 @@ public class Environment {
         return newEnvironment;
     }
 
-    private void loopGameOfLife(int delayInMilliseconds) {
+    private void loopGameOfLife() {
         while (generation < maxGeneration) {
             int[][] newEnvironment = generateNextEnvironment();
             addHistory(getCells());
             copyNewGenerationToCurrent(newEnvironment);
-            //printGeneration(getGeneration());
-            //displayEnvironment();
-            //runDelay(delayInMilliseconds);
             incrementGeneration();
-        }
-        printDoneMessage();
-    }
-
-    private void printDoneMessage() {
-        System.out.println("Done!");
-    }
-
-    private void runDelay(int delayInMilliseconds) {
-        try {
-            Thread.sleep(delayInMilliseconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
@@ -156,15 +113,16 @@ public class Environment {
         int lifeCounter = 0; //1 = life, 0 = death
         for (int i : neighbors) if (i == 1) lifeCounter++;
 
+        int randomDeathChance = getNumberBetween(0,100000);
+
         if (cell == 1 && lifeCounter < 2) return 0;
-        else if (cell == 1 && lifeCounter < 4) return 1;
+        else if (cell == 1 && lifeCounter < 4) {
+            if (randomDeathChance == 9) return 0;
+            else return 1;
+        }
         else if (cell == 1 && lifeCounter > 3) return 0;
         else if (cell == 0 && lifeCounter == 3) return 1;
         return 0;
-    }
-
-    private String getCellDisplay(int state) {
-        return state == 1 ? Environment.cellAlive : Environment.cellDead;
     }
 
     private int getGeneration() {
@@ -185,5 +143,9 @@ public class Environment {
 
     private int[][] getCells() {
         return cells;
+    }
+
+    public int getMaxGeneration() {
+        return maxGeneration;
     }
 }
