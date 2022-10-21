@@ -2,18 +2,14 @@ package com.justinmtech.gameoflife;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.List;
 
-public class GUI extends Canvas implements KeyListener {
+public class GUI extends Canvas {
     private final GameConfig gameConfig;
     private final Environment environment;
-    private int delay;
-    private boolean running;
+    private final int delay;
 
     public GUI(Environment environment, GameConfig gameConfig) {
-        this.running = true;
         this.gameConfig = gameConfig;
         this.environment = environment;
         this.delay = gameConfig.getUpdateDelay();
@@ -32,7 +28,7 @@ public class GUI extends Canvas implements KeyListener {
 
     public void paint(Graphics g) {
         int generation = 0;
-        while (generation < environment.getMaxGeneration() - 1 && running) {
+        while (generation < environment.getMaxGeneration() - 1) {
             int y = 0;
             while (y < environment.getHeight() - 1) {
                 for (int x = 0; x < environment.getWidth() - 1; x++) {
@@ -54,7 +50,11 @@ public class GUI extends Canvas implements KeyListener {
 
     private void fillSquare(Graphics g, int x, int y, int cell) {
         if (cell == 1) {
-            g.setColor(getColorFromString(gameConfig.getCellColor()));
+            if (gameConfig.isUseRandomCellColors()) {
+                g.setColor(pickRandomColor());
+            } else {
+                g.setColor(getColorFromString(gameConfig.getCellColor()));
+            }
             g.fillRect(x, y, 1, 1);
         } else {
             g.setColor(getColorFromString(gameConfig.getBackgroundColor()));
@@ -92,35 +92,19 @@ public class GUI extends Canvas implements KeyListener {
         };
     }
 
-    public boolean isRunning() {
-        return running;
-    }
-
-    public void setRunning(boolean running) {
-        this.running = running;
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        System.out.println("typed");
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        System.out.println(e.getKeyCode());
-        if (e.getKeyCode() == KeyEvent.VK_W) {
-            delay++;
-            System.out.println("Delay raised to: " + delay);
-        } else if (e.getKeyCode() == KeyEvent.VK_S) {
-            if (delay > 0) {
-                delay--;
-                System.out.println("Delay lowered to: " + delay);
-            }
+    private Color pickRandomColor() {
+        int number = Environment.getNumberBetween(0, 9);
+        switch (number) {
+            case 1: return Color.BLACK;
+            case 2: return Color.RED;
+            case 3: return Color.BLUE;
+            case 4: return Color.GREEN;
+            case 5: return Color.YELLOW;
+            case 6: return Color.MAGENTA;
+            case 7: return Color.PINK;
+            case 8: return Color.CYAN;
+            case 9: return Color.ORANGE;
+            default: return Color.WHITE;
         }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
     }
 }

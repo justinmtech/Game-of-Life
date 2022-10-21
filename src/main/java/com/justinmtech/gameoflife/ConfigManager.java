@@ -37,6 +37,7 @@ public class ConfigManager {
             config.setGameTitle("Game of Life");
             config.setRandomDeathChance(100);
             config.setUseRandomDeathChance(false);
+            config.setUseRandomCellColors(false);
             ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
             try {
                 objectMapper.writeValue(new File("config.yaml"), config);

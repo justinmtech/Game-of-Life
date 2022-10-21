@@ -74,7 +74,7 @@ public class Environment {
         }
     }
 
-    private int getNumberBetween(int min, int max) {
+    public static int getNumberBetween(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
     }
 

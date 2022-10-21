@@ -15,6 +15,7 @@ public class GameConfig {
     private boolean useSeed;
     private String backgroundColor;
     private String cellColor;
+    private boolean useRandomCellColors;
 
     public GameConfig() {
 
@@ -116,6 +117,14 @@ public class GameConfig {
         this.randomDeathChance = randomDeathChance;
     }
 
+    public boolean isUseRandomCellColors() {
+        return useRandomCellColors;
+    }
+
+    public void setUseRandomCellColors(boolean useRandomCellColors) {
+        this.useRandomCellColors = useRandomCellColors;
+    }
+
     @Override
     public String toString() {
         return "updateDelay: " + updateDelay +
@@ -129,6 +138,7 @@ public class GameConfig {
                 "\nuseSeed: " + useSeed +
                 "\nbackgroundColor: " + backgroundColor +
                 "\ncellColor: " + cellColor +
+                "\nuseRandomCellColors: " + cellColor +
                 "\ngameTitle: " + gameTitle;
     }
 }
