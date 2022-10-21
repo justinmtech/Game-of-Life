@@ -16,8 +16,6 @@ public class ConfigManager {
         boolean configLoaded = loadConfig();
         if (configLoaded) {
             System.out.println("[Game of Life] Config loaded successfully!");
-        } else {
-            setDefaultConfig();
         }
     }
 
@@ -32,12 +30,16 @@ public class ConfigManager {
             config.setMaxGeneration(1000);
             config.setSeed(new int[]{0, 0, 0, 1});
             config.setUseSeed(false);
-            config.setBackgroundColor("WHITE");
-            config.setCellColor("BLACK");
+            config.setBackgroundColor("BLACK");
+            config.setCellColor("GREEN");
             config.setGameTitle("Game of Life");
             config.setRandomDeathChance(100);
             config.setUseRandomDeathChance(false);
             config.setUseRandomCellColors(false);
+            config.setDisableGUI(false);
+            config.setShowGenerationInConsole(false);
+            config.setConsoleCellDeadDisplay(" ");
+            config.setConsoleCellAliveDisplay("*");
             ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
             try {
                 objectMapper.writeValue(new File("config.yaml"), config);
@@ -56,7 +58,7 @@ public class ConfigManager {
         if (file.exists()) {
             try {
                 gameConfig = objectMapper.readValue(file, GameConfig.class);
-                System.out.println("[Game of Life] Configuration info:\n" + gameConfig.toString());
+                System.out.println("[Game of Life] Configuration:\n" + gameConfig.toString());
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("[Game of Life] Could not load config.");
@@ -65,15 +67,6 @@ public class ConfigManager {
             System.out.println("[Game of Life] Config file does not exist..");
         }
         return false;
-    }
-
-    private void setDefaultConfig() {
-        gameConfig.setSeed(new int[]{0,1,1,1,0,0,1,0,0,0,0,0,1});
-        gameConfig.setUpdateDelay(50);
-        gameConfig.setWidth(500);
-        gameConfig.setHeight(500);
-        gameConfig.setGenerationChance(10);
-        System.out.println("[Game of Life] Default configuration set.");
     }
 
     public GameConfig getGameConfig() {

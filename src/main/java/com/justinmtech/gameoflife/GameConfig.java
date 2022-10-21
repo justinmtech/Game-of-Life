@@ -16,6 +16,10 @@ public class GameConfig {
     private String backgroundColor;
     private String cellColor;
     private boolean useRandomCellColors;
+    private boolean disableGUI;
+    private boolean showGenerationInConsole;
+    private String consoleCellAliveDisplay;
+    private String consoleCellDeadDisplay;
 
     public GameConfig() {
 
@@ -125,6 +129,38 @@ public class GameConfig {
         this.useRandomCellColors = useRandomCellColors;
     }
 
+    public boolean isShowGenerationInConsole() {
+        return showGenerationInConsole;
+    }
+
+    public void setShowGenerationInConsole(boolean showGenerationInConsole) {
+        this.showGenerationInConsole = showGenerationInConsole;
+    }
+
+    public boolean isDisableGUI() {
+        return disableGUI;
+    }
+
+    public void setDisableGUI(boolean disableGUI) {
+        this.disableGUI = disableGUI;
+    }
+
+    public String getConsoleCellAliveDisplay() {
+        return consoleCellAliveDisplay;
+    }
+
+    public void setConsoleCellAliveDisplay(String consoleCellAliveDisplay) {
+        this.consoleCellAliveDisplay = consoleCellAliveDisplay;
+    }
+
+    public String getConsoleCellDeadDisplay() {
+        return consoleCellDeadDisplay;
+    }
+
+    public void setConsoleCellDeadDisplay(String consoleCellDeadDisplay) {
+        this.consoleCellDeadDisplay = consoleCellDeadDisplay;
+    }
+
     @Override
     public String toString() {
         return "updateDelay: " + updateDelay +
@@ -138,7 +174,11 @@ public class GameConfig {
                 "\nuseSeed: " + useSeed +
                 "\nbackgroundColor: " + backgroundColor +
                 "\ncellColor: " + cellColor +
-                "\nuseRandomCellColors: " + cellColor +
+                "\nuseRandomCellColors: " + useRandomCellColors +
+                "\nshowGenerationInConsole: " + showGenerationInConsole +
+                "\ndisableGUI: " + disableGUI +
+                "\nconsoleCellAliveDisplay: " + consoleCellAliveDisplay +
+                "\nconsoleCellDeadDisplay: " + consoleCellDeadDisplay +
                 "\ngameTitle: " + gameTitle;
     }
 }

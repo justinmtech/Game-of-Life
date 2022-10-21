@@ -48,7 +48,7 @@ public class Environment {
         int y = 0;
         while (y < getHeight()) {
             for (int x = 0; x < getWidth(); x++) {
-                int max = getNumberBetween(1, 50);
+                int max = getNumberBetween(1, gameConfig.getGenerationChance());
                 int r = getNumberBetween(0, max);
                 if (r == 1) setCellState(x, y, 1);
                 else setCellState(x, y, 0);
@@ -115,14 +115,56 @@ public class Environment {
         return newEnvironment;
     }
 
+    private void printCellsToConsole() {
+        int y = 0;
+        printGeneration();
+        while (y < getHeight()) {
+            for (int x = 0; x < getWidth(); x++) {
+                printIndividualCell(getCell(x, y));
+            }
+            printEmptyLine();
+            y++;
+        }
+    }
+
+    private void printGeneration() {
+        System.out.println("[Game of Life] Generation: " + getGeneration() + "/" + getMaxGeneration());
+    }
+
+    private void printEmptyLine() {
+        System.out.println();
+    }
+
+    private String getCellDisplay(int state) {
+        if (state == 1) return gameConfig.getConsoleCellAliveDisplay();
+        else return gameConfig.getConsoleCellDeadDisplay();
+    }
+
+    private void printIndividualCell(int state) {
+        System.out.print(getCellDisplay(state));
+    }
+
     private void loopGameOfLife() {
+        if (gameConfig.isShowGenerationInConsole()) printCellsToConsole();
         while (generation < getMaxGeneration()) {
             int[][] newEnvironment = generateNextEnvironment();
             addHistory(getCells());
             copyNewGenerationToCurrent(newEnvironment);
             incrementGeneration();
+            if (gameConfig.isShowGenerationInConsole()) {
+                printCellsToConsole();
+                triggerDelay();
+            }
         }
         System.out.println("[Game of Life] Generation complete...");
+    }
+
+    private void triggerDelay() {
+        try {
+            Thread.sleep(gameConfig.getUpdateDelay());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void copyNewGenerationToCurrent(int[][] newGeneration) {
