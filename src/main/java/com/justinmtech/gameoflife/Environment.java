@@ -14,7 +14,7 @@ public class Environment {
         this.gameConfig = configManager.getGameConfig();
         this.history = new ArrayList<>();
         this.generation = 1;
-        this.cells = new int[gameConfig.getHeight()][gameConfig.getWidth()];
+        this.cells = new int[gameConfig.getWidth()][gameConfig.getHeight()];
     }
 
     public int getHeight() {
@@ -46,7 +46,7 @@ public class Environment {
 
     public void generateRandomCells() {
         int y = 0;
-        while (y < getHeight()) {
+        while (y < getHeight() - 1) {
             for (int x = 0; x < getWidth(); x++) {
                 int max = getNumberBetween(1, gameConfig.getGenerationChance());
                 int r = getNumberBetween(0, max);
@@ -61,7 +61,7 @@ public class Environment {
         int y = 0;
         int seedLength = getSeed().length;
         int seedIndex = 0;
-        while (y < getHeight()) {
+        while (y < getHeight() - 1) {
             for (int x = 0; x < getWidth(); x++) {
                 setCellState(x, y, getSeed()[seedIndex]);
                 if (seedIndex < seedLength - 1) {
@@ -86,7 +86,7 @@ public class Environment {
     private int[] generateLineOfCellsAtY(int y) {
         int[] newLine = new int[getWidth()];
         int prev = y - 1;
-        for (int x = 1; x < getWidth() - 1; x++) {
+        for (int x = 1; x < getWidth(); x++) {
             newLine[x] = getLifeOrDeath(getCell(x, prev), getNeighborCells(prev, x));
         }
         return newLine;
@@ -106,7 +106,7 @@ public class Environment {
 
     private int[][] generateNextEnvironment() {
         int[][] newEnvironment = new int[getWidth()][getHeight()];
-        for (int y = 1; y < getHeight(); y++) {
+        for (int y = 1; y < getHeight() - 1; y++) {
             int[] line = generateLineOfCellsAtY(y);
             for (int x = 0; x < getWidth(); x++) {
                 newEnvironment[x][y - 1] = line[x];
@@ -118,7 +118,7 @@ public class Environment {
     private void printCellsToConsole() {
         int y = 0;
         printGeneration();
-        while (y < getHeight()) {
+        while (y < getHeight() - 1) {
             for (int x = 0; x < getWidth(); x++) {
                 printIndividualCell(getCell(x, y));
             }
