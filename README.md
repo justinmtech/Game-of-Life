@@ -1,4 +1,4 @@
-# GameOfLife
+# Game of Life
 A customizable re-make of Conway's famous "Game of Life". Configurable environment size, cell colors, generation rate, life/death chances and generation seeds!
 
 # Setup
