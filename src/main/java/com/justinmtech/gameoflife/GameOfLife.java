@@ -3,9 +3,13 @@ package com.justinmtech.gameoflife;
 public class GameOfLife {
 
     public static void main(String[] args) {
-        Environment environment = new Environment(800, 800, 500);
-        GUI gui = new GUI(environment);
-        gui.setFrameRate(50);
+        ConfigManager configManager = new ConfigManager();
+        GameConfig gameConfig = configManager.getGameConfig();
+        Environment environment = new Environment(configManager);
+        environment.run(gameConfig.isUseSeed());
+        GUI gui = new GUI(environment, gameConfig);
         gui.run();
     }
 }
+
+

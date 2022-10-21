@@ -1,44 +1,50 @@
 package com.justinmtech.gameoflife;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Environment {
-    private final int height;
-    private final int width;
+    private final GameConfig gameConfig;
     private int generation;
-    private final int maxGeneration;
     private int[][] cells;
     private final List<int[][]> history;
 
-    public Environment(int height, int width, int maxGeneration) {
+    public Environment(ConfigManager configManager) {
+        this.gameConfig = configManager.getGameConfig();
         this.history = new ArrayList<>();
-        this.height = height;
-        this.width = width;
         this.generation = 1;
-        this.maxGeneration = maxGeneration;
-        this.cells = new int[width][height];
-        initializeGame();
+        this.cells = new int[gameConfig.getHeight()][gameConfig.getWidth()];
     }
 
     public int getHeight() {
-        return height;
+        return gameConfig.getHeight();
     }
 
     public int getWidth() {
-        return width;
+        return gameConfig.getWidth();
     }
 
     public List<int[][]> getHistory() {
         return history;
     }
 
-    private void initializeGame() {
-        generateRandomCells();
+    private int[] getSeed() {
+        return gameConfig.getSeed();
+    }
+
+    public void run(boolean seed) {
+        if (seed && getSeed() != null) {
+            System.out.println("[Game of Life] Now generating game with seed.. [" + Arrays.toString(getSeed()) + "]");
+            generateCellsFromSeed();
+        } else {
+            System.out.println("[Game of Life] Now generating game with chance.." + " [cell chance: " + gameConfig.getGenerationChance() + "]");
+            generateRandomCells();
+        }
         loopGameOfLife();
     }
 
-    private void generateRandomCells() {
+    public void generateRandomCells() {
         int y = 0;
         while (y < getHeight()) {
             for (int x = 0; x < getWidth(); x++) {
@@ -46,6 +52,23 @@ public class Environment {
                 int r = getNumberBetween(0, max);
                 if (r == 1) setCellState(x, y, 1);
                 else setCellState(x, y, 0);
+            }
+            y++;
+        }
+    }
+
+    public void generateCellsFromSeed() {
+        int y = 0;
+        int seedLength = getSeed().length;
+        int seedIndex = 0;
+        while (y < getHeight()) {
+            for (int x = 0; x < getWidth(); x++) {
+                setCellState(x, y, getSeed()[seedIndex]);
+                if (seedIndex < seedLength - 1) {
+                    seedIndex++;
+                } else {
+                    seedIndex = 0;
+                }
             }
             y++;
         }
@@ -93,12 +116,13 @@ public class Environment {
     }
 
     private void loopGameOfLife() {
-        while (generation < maxGeneration) {
+        while (generation < getMaxGeneration()) {
             int[][] newEnvironment = generateNextEnvironment();
             addHistory(getCells());
             copyNewGenerationToCurrent(newEnvironment);
             incrementGeneration();
         }
+        System.out.println("[Game of Life] Generation complete...");
     }
 
     private void copyNewGenerationToCurrent(int[][] newGeneration) {
@@ -113,15 +137,18 @@ public class Environment {
         int lifeCounter = 0; //1 = life, 0 = death
         for (int i : neighbors) if (i == 1) lifeCounter++;
 
-        int randomDeathChance = getNumberBetween(0,100000);
+        int randomDeathChance = getNumberBetween(0, gameConfig.getRandomDeathChance());
 
         if (cell == 1 && lifeCounter < 2) return 0;
         else if (cell == 1 && lifeCounter < 4) {
-            if (randomDeathChance == 9) return 0;
+            if (randomDeathChance == 1 && gameConfig.isUseRandomDeathChance()) return 0;
             else return 1;
         }
         else if (cell == 1 && lifeCounter > 3) return 0;
-        else if (cell == 0 && lifeCounter == 3) return 1;
+        else if (cell == 0 && lifeCounter == 3) {
+            if (randomDeathChance == 1 && gameConfig.isUseRandomDeathChance()) return 0;
+            else return 1;
+        }
         return 0;
     }
 
@@ -146,6 +173,6 @@ public class Environment {
     }
 
     public int getMaxGeneration() {
-        return maxGeneration;
+        return gameConfig.getMaxGeneration();
     }
 }
