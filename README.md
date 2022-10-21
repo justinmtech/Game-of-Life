@@ -1,14 +1,19 @@
 # Game of Life
-A customizable re-make of Conway's famous "Game of Life". Configurable environment size, cell colors, generation rate, life/death chances and generation seeds!
+A customizable re-make of Conway's famous "Game of Life" made in Java. Configurable environment size, cell colors, generation rate, life/death chances and generation seeds!
 
 # Setup
 1. Download the release jar file (or clone and build it yourself)
-2. Run the jar file in a terminal/command prompt with "java -jar {fileName}.jar"
-3. Enjoy the show!
+2. Run the jar file in a terminal with "java -jar {fileName}.jar"
+3. Let the game generate, then enjoy the simulation!
 
 # Optional Setup
 1. Make a batch or shell script file with "java -jar {fileName}.jar" to easily start/stop the game.
-2. (Optional) Tweak the configuration settings to your liking.
+2. Tweak the configuration settings to your liking.
+
+# Ram Usage
+The simulation uses a lot of ram (around 1.5 gigs if using a 500x500 generation).
+You can lower the height and width of the game to greatly reduce the resource consumption if needed.
+Use flags if you want to limit ram usage (ie: "java -jar -Xmx1024m -Xms512m {fileName}.jar")
 
 # Information
 The game first generates until the "maxGeneration" value is reached.
