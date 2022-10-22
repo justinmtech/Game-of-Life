@@ -1,13 +1,18 @@
-package com.justinmtech.gameoflife;
+package com.justinmtech.gameoflife.generation;
+
+import com.justinmtech.gameoflife.config.ConfigManager;
+import com.justinmtech.gameoflife.config.GameConfig;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+//TODO Create new data type for cells so they can have a state other than 1 or 0. This will make them more modular.
 public class Environment {
     private final GameConfig gameConfig;
     private int generation;
     private int[][] cells;
+    private List<Cell> newCells;
     private final List<int[][]> history;
 
     public Environment(ConfigManager configManager) {
@@ -35,10 +40,10 @@ public class Environment {
 
     public void run(boolean seed) {
         if (seed && getSeed() != null) {
-            System.out.println("[Game of Life] Now generating game with seed.. [" + Arrays.toString(getSeed()) + "]");
+            System.out.println("[" + gameConfig.getGameTitle() + "] Now generating game with seed.. [" + Arrays.toString(getSeed()) + "]");
             generateCellsFromSeed();
         } else {
-            System.out.println("[Game of Life] Now generating game with chance.." + " [cell chance: " + gameConfig.getGenerationChance() + "]");
+            System.out.println("[" + gameConfig.getGameTitle() + "] Now generating game with chance.." + " [cell chance: " + gameConfig.getGenerationChance() + "]");
             generateRandomCells();
         }
         loopGameOfLife();
@@ -104,6 +109,7 @@ public class Environment {
         return new int[]{topLeft, up, topRight, left, right, bottomLeft, down, bottomRight};
     }
 
+
     private int[][] generateNextEnvironment() {
         int[][] newEnvironment = new int[getWidth()][getHeight()];
         for (int y = 1; y < getHeight() - 1; y++) {
@@ -128,7 +134,7 @@ public class Environment {
     }
 
     private void printGeneration() {
-        System.out.println("[Game of Life] Generation: " + getGeneration() + "/" + getMaxGeneration());
+        System.out.println("[" + gameConfig.getGameTitle() + "] Generation: " + getGeneration() + "/" + getMaxGeneration());
     }
 
     private void printEmptyLine() {
@@ -156,7 +162,7 @@ public class Environment {
                 triggerDelay();
             }
         }
-        System.out.println("[Game of Life] Generation complete...");
+        System.out.println("[" + gameConfig.getGameTitle() + "] Generation complete...");
     }
 
     private void triggerDelay() {
@@ -175,10 +181,14 @@ public class Environment {
         this.cells = cells;
     }
 
-    private int getLifeOrDeath(int cell, int[] neighbors) {
+    private int getLiveCellsFromNeighbors(int[] neighbors) {
         int lifeCounter = 0; //1 = life, 0 = death
         for (int i : neighbors) if (i == 1) lifeCounter++;
+        return lifeCounter;
+    }
 
+    private int getLifeOrDeath(int cell, int[] neighbors) {
+        int lifeCounter = getLiveCellsFromNeighbors(neighbors);
         int randomDeathChance = getNumberBetween(0, gameConfig.getRandomDeathChance());
 
         if (cell == 1 && lifeCounter < 2) return 0;

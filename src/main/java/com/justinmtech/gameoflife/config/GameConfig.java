@@ -1,8 +1,11 @@
-package com.justinmtech.gameoflife;
+package com.justinmtech.gameoflife.config;
+
+import com.justinmtech.gameoflife.generation.GenerationType;
 
 import java.util.Arrays;
 
 public class GameConfig {
+    private GenerationType generator;
     private String gameTitle;
     private int updateDelay;
     private int generationChance;
@@ -21,8 +24,14 @@ public class GameConfig {
     private String consoleCellAliveDisplay;
     private String consoleCellDeadDisplay;
 
-    public GameConfig() {
+    public GameConfig() {}
 
+    public GenerationType getGenerator() {
+        return generator;
+    }
+
+    public void setGenerator(GenerationType type) {
+        this.generator = type;
     }
 
     public int getUpdateDelay() {
@@ -163,7 +172,9 @@ public class GameConfig {
 
     @Override
     public String toString() {
-        return "updateDelay: " + updateDelay +
+        return "#generator types static/dynamic" +
+                "\ngenerator: " + generator +
+                "\nupdateDelay: " + updateDelay +
                 "\ngenerationChance: " + generationChance +
                 "\nmaxGenerations: " + maxGeneration +
                 "\nuseRandomDeathChance: " + useRandomDeathChance +

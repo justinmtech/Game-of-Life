@@ -1,4 +1,7 @@
-package com.justinmtech.gameoflife;
+package com.justinmtech.gameoflife.display;
+
+import com.justinmtech.gameoflife.generation.Environment;
+import com.justinmtech.gameoflife.config.GameConfig;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +19,7 @@ public class GUI extends Canvas {
     }
 
     public void run() {
-        System.out.println("[Game of Life] GUI opening...");
+        System.out.println("[" + gameConfig.getGameTitle() + "] GUI opening...");
         JFrame frame = new JFrame(gameConfig.getGameTitle());
         Canvas canvas = new GUI(environment, gameConfig);
         canvas.setSize(environment.getWidth(), environment.getHeight());
@@ -44,7 +47,7 @@ public class GUI extends Canvas {
             }
             generation++;
         }
-        System.out.println("[Game of Life] Simulation complete!");
+        System.out.println("[" + gameConfig.getGameTitle() + "] Simulation complete!");
         System.exit(0);
     }
 

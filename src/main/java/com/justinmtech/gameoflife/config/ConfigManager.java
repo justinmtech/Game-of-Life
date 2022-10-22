@@ -1,9 +1,10 @@
-package com.justinmtech.gameoflife;
+package com.justinmtech.gameoflife.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-
-import java.io.*;
+import com.justinmtech.gameoflife.generation.GenerationType;
+import java.io.File;
+import java.io.IOException;
 
 public class ConfigManager {
     private GameConfig gameConfig;
@@ -11,18 +12,18 @@ public class ConfigManager {
     public ConfigManager() {
         gameConfig = new GameConfig();
         if (saveDefaultConfigTest()) {
-            System.out.println("[Game of Life] Default config file created. You may modify the config.yaml to customize the game's settings.");
+            System.out.println("[" + gameConfig.getGameTitle() + "] Default config file created. You may modify the config.yaml to customize the game's settings.");
         }
         boolean configLoaded = loadConfig();
-        if (configLoaded) {
-            System.out.println("[Game of Life] Config loaded successfully!");
-        }
+        if (configLoaded) System.out.println("[" + gameConfig.getGameTitle() + "] Config loaded successfully!");
+
     }
 
     private boolean saveDefaultConfigTest() {
         File file = new File("config.yaml");
         if (!file.exists()) {
             GameConfig config = new GameConfig();
+            config.setGenerator(GenerationType.DYNAMIC);
             config.setUpdateDelay(50);
             config.setGenerationChance(5);
             config.setHeight(500);
@@ -46,7 +47,7 @@ public class ConfigManager {
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("[Game of Life] Could not save default config to path.");
+                System.out.println("[" + gameConfig.getGameTitle() + "] Could not save default config to path.");
             }
         }
         return false;
@@ -58,13 +59,13 @@ public class ConfigManager {
         if (file.exists()) {
             try {
                 gameConfig = objectMapper.readValue(file, GameConfig.class);
-                System.out.println("[Game of Life] Configuration:\n" + gameConfig.toString());
+                System.out.println("[" + gameConfig.getGameTitle() + "] Configuration:\n" + gameConfig.toString());
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("[Game of Life] Could not load config.");
+                System.out.println("[" + gameConfig.getGameTitle() + "] Could not load config.");
             }
         } else {
-            System.out.println("[Game of Life] Config file does not exist..");
+            System.out.println("[" + gameConfig.getGameTitle() + "] Config file does not exist..");
         }
         return false;
     }
