@@ -3,23 +3,23 @@ package com.justinmtech.gameoflife.generation;
 import com.justinmtech.gameoflife.config.ConfigManager;
 import com.justinmtech.gameoflife.config.GameConfig;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
 
 //TODO Create new data type for cells so they can have a state other than 1 or 0. This will make them more modular.
 public class Environment {
     private final GameConfig gameConfig;
     private int generation;
-    private int[][] cells;
-    private List<Cell> newCells;
-    private final List<int[][]> history;
+    private Map<int[], Cell> cells;
+    private final List<Map<int[], Cell>> history;
 
     public Environment(ConfigManager configManager) {
         this.gameConfig = configManager.getGameConfig();
         this.history = new ArrayList<>();
         this.generation = 1;
-        this.cells = new int[gameConfig.getWidth()][gameConfig.getHeight()];
+        //this.cells = new int[gameConfig.getWidth()][gameConfig.getHeight()];
+        this.cells = new HashMap<>();
     }
 
     public int getHeight() {
@@ -30,7 +30,7 @@ public class Environment {
         return gameConfig.getWidth();
     }
 
-    public List<int[][]> getHistory() {
+    public List<Map<int[], Cell>> getHistory() {
         return history;
     }
 
@@ -83,39 +83,41 @@ public class Environment {
         return (int) ((Math.random() * (max - min)) + min);
     }
 
-    private int getCell(int x, int y) {
-        if ((x < 0 || x > getWidth() - 1) || (y < 0 || y > getHeight() - 1)) return 0;
-        return cells[x][y];
+    private Cell getCell(int x, int y) {
+        if ((x < 0 || x > getWidth() - 1) || (y < 0 || y > getHeight() - 1)) return new Cell(0, x, y);
+        return cells.get(new int[]{x, y});
     }
 
-    private int[] generateLineOfCellsAtY(int y) {
-        int[] newLine = new int[getWidth()];
+    private List<Cell> generateLineOfCellsAtY(int y) {
+        List<Cell> newLine = new ArrayList<>();
         int prev = y - 1;
         for (int x = 1; x < getWidth(); x++) {
-            newLine[x] = getLifeOrDeath(getCell(x, prev), getNeighborCells(prev, x));
+            Cell cell = getLifeOrDeath(getCell(x, prev), getNeighborCells(prev, x));
+            cell.setCoordinates(x, y);
+            newLine.add(cell);
         }
         return newLine;
     }
 
-    private int[] getNeighborCells(int y, int x) {
-        int topLeft = getCell(x - 1, y - 1);
-        int up = getCell(x, y - 1);
-        int topRight = getCell(x + 1, y - 1);
-        int left = getCell(x - 1, y);
-        int right = getCell(x + 1, y);
-        int bottomLeft = getCell(x - 1, y + 1);
-        int down = getCell(x, y + 1);
-        int bottomRight = getCell(x + 1, y + 1);
-        return new int[]{topLeft, up, topRight, left, right, bottomLeft, down, bottomRight};
+    private List<Cell> getNeighborCells(int y, int x) {
+        Cell topLeft = getCell(x - 1, y - 1);
+        Cell up = getCell(x, y - 1);
+        Cell topRight = getCell(x + 1, y - 1);
+        Cell left = getCell(x - 1, y);
+        Cell right = getCell(x + 1, y);
+        Cell bottomLeft = getCell(x - 1, y + 1);
+        Cell down = getCell(x, y + 1);
+        Cell bottomRight = getCell(x + 1, y + 1);
+        return Arrays.asList(topLeft, up, topRight, left, right, bottomLeft, down, bottomRight);
     }
 
 
-    private int[][] generateNextEnvironment() {
-        int[][] newEnvironment = new int[getWidth()][getHeight()];
+    private Map<Coordinates, Cell> generateNextEnvironment() {
+        Map<Coordinates, Cell> newEnvironment = new HashMap<>();
         for (int y = 1; y < getHeight() - 1; y++) {
-            int[] line = generateLineOfCellsAtY(y);
+            List<Cell> line = generateLineOfCellsAtY(y);
             for (int x = 0; x < getWidth(); x++) {
-                newEnvironment[x][y - 1] = line[x];
+                newEnvironment.get(new Coordinates(x, y - 1)).setState(line.get(x).getState());
             }
         }
         return newEnvironment;
@@ -126,7 +128,7 @@ public class Environment {
         printGeneration();
         while (y < getHeight() - 1) {
             for (int x = 0; x < getWidth(); x++) {
-                printIndividualCell(getCell(x, y));
+                printIndividualCell(getCell(x, y).getState());
             }
             printEmptyLine();
             y++;
@@ -153,7 +155,7 @@ public class Environment {
     private void loopGameOfLife() {
         if (gameConfig.isShowGenerationInConsole()) printCellsToConsole();
         while (generation < getMaxGeneration()) {
-            int[][] newEnvironment = generateNextEnvironment();
+            Map<Coordinates, Cell> newEnvironment = generateNextEnvironment();
             addHistory(getCells());
             copyNewGenerationToCurrent(newEnvironment);
             incrementGeneration();
@@ -173,35 +175,81 @@ public class Environment {
         }
     }
 
-    private void copyNewGenerationToCurrent(int[][] newGeneration) {
+    private void copyNewGenerationToCurrent(Map<int[], Cell> newGeneration) {
         setCells(newGeneration);
     }
 
-    public void setCells(int[][] cells) {
+    public void setCells(Map<int[], Cell> cells) {
         this.cells = cells;
     }
 
-    private int getLiveCellsFromNeighbors(int[] neighbors) {
+    private int getLiveCellsFromNeighbors(List<Cell> neighbors) {
         int lifeCounter = 0; //1 = life, 0 = death
-        for (int i : neighbors) if (i == 1) lifeCounter++;
+        for (Cell c : neighbors) if (c.getState() == 1) lifeCounter++;
         return lifeCounter;
     }
 
-    private int getLifeOrDeath(int cell, int[] neighbors) {
+    private Color generateColorBasedOnNeighbors(List<Cell> neighbors) {
+        List<Color> colors = getColorsOfNeighbors(neighbors);
+        return getPrimaryColor(colors);
+    }
+
+    private List<Color> getColorsOfNeighbors(List<Cell> neighbors) {
+        List<Color> colors = new ArrayList<>();
+        for (Cell c : neighbors) {
+            colors.add(c.getColor());
+        }
+        return colors;
+    }
+
+    private Color getPrimaryColor(List<Color> colors) {
+        int green = 0;
+        int blue = 0;
+        for (Color color : colors) {
+            switch (color.toString().toUpperCase()) {
+                case "BLUE": blue++;
+                case "GREEN": green++;
+            }
+        }
+        if (green > blue) return Color.GREEN;
+        if (blue > green) return Color.BLUE;
+        return Color.BLUE;
+    }
+
+    private Cell getLifeOrDeath(Cell cell, List<Cell> neighbors) {
         int lifeCounter = getLiveCellsFromNeighbors(neighbors);
         int randomDeathChance = getNumberBetween(0, gameConfig.getRandomDeathChance());
+        int cellState = cell.getState();
 
-        if (cell == 1 && lifeCounter < 2) return 0;
-        else if (cell == 1 && lifeCounter < 4) {
-            if (randomDeathChance == 1 && gameConfig.isUseRandomDeathChance()) return 0;
-            else return 1;
+        if (cellState == 1 && lifeCounter < 2) {
+            cell.setState(0);
+            return cell;
         }
-        else if (cell == 1 && lifeCounter > 3) return 0;
-        else if (cell == 0 && lifeCounter == 3) {
-            if (randomDeathChance == 1 && gameConfig.isUseRandomDeathChance()) return 0;
-            else return 1;
+        else if (cellState == 1 && lifeCounter < 4) {
+            if (randomDeathChance == 1 && gameConfig.isUseRandomDeathChance()) {
+                cell.setColor(Color.BLUE);
+                cell.setState(0);
+            }
+            else {
+                cell.setState(1);
+                cell.setColor(Color.RED);
+            }
+            return cell;
         }
-        return 0;
+        else if (cellState == 1 && lifeCounter > 3) {
+            cell.setState(0);
+            return cell;
+        } else if (cellState == 0 && lifeCounter == 3) {
+            if (randomDeathChance == 1 && gameConfig.isUseRandomDeathChance()) {
+                cell.setState(0);
+            }
+            else {
+                cell.setState(1);
+            }
+            return cell;
+        }
+        cell.setState(0);
+        return cell;
     }
 
     private int getGeneration() {
@@ -213,14 +261,14 @@ public class Environment {
     }
 
     private void setCellState(int x, int y, int state) {
-        this.cells[x][y] = state;
+        getCell(x, y).setState(state);
     }
 
-    private void addHistory(int[][] environment) {
+    private void addHistory(Map<int[], Cell> environment) {
         this.history.add(environment);
     }
 
-    private int[][] getCells() {
+    private Map<int[], Cell> getCells() {
         return cells;
     }
 

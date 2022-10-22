@@ -1,11 +1,14 @@
 package com.justinmtech.gameoflife.display;
 
+import com.justinmtech.gameoflife.generation.Cell;
+import com.justinmtech.gameoflife.generation.Coordinates;
 import com.justinmtech.gameoflife.generation.Environment;
 import com.justinmtech.gameoflife.config.GameConfig;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Map;
 
 public class GUI extends Canvas {
     private final GameConfig gameConfig;
@@ -35,7 +38,7 @@ public class GUI extends Canvas {
             int y = 0;
             while (y < environment.getHeight() - 1) {
                 for (int x = 0; x < environment.getWidth() - 1; x++) {
-                    int cell = getCellInGeneration(generation, x, y);
+                    Cell cell = getCellInGeneration(generation, x, y);
                     fillSquare(g, x, y, cell);
                 }
                 y++;
@@ -51,12 +54,12 @@ public class GUI extends Canvas {
         System.exit(0);
     }
 
-    private void fillSquare(Graphics g, int x, int y, int cell) {
-        if (cell == 1) {
+    private void fillSquare(Graphics g, int x, int y, Cell cell) {
+        if (cell.getState() == 1) {
             if (gameConfig.isUseRandomCellColors()) {
                 g.setColor(pickRandomColor());
             } else {
-                g.setColor(getColorFromString(gameConfig.getCellColor()));
+                g.setColor(cell.getColor());
             }
             g.fillRect(x, y, 1, 1);
         } else {
@@ -65,16 +68,16 @@ public class GUI extends Canvas {
         }
     }
 
-    private List<int[][]> getHistory() {
+    private List<Map<Coordinates, Cell>> getHistory() {
         return environment.getHistory();
     }
 
-    private int[][] getGeneration(int generation) {
+    private Map<Coordinates, Cell> getGeneration(int generation) {
         return getHistory().get(generation);
     }
 
-    private int getCellInGeneration(int generation, int x, int y) {
-        return getGeneration(generation)[x][y];
+    private Cell getCellInGeneration(int generation, int x, int y) {
+        return getGeneration(generation).get(new Coordinates(x, y));
     }
 
     private Color getColorFromString(String color) {
