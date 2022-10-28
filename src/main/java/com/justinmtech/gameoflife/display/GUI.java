@@ -1,14 +1,11 @@
 package com.justinmtech.gameoflife.display;
 
-import com.justinmtech.gameoflife.generation.Cell;
-import com.justinmtech.gameoflife.generation.Coordinates;
-import com.justinmtech.gameoflife.generation.Environment;
 import com.justinmtech.gameoflife.config.GameConfig;
+import com.justinmtech.gameoflife.generation.Environment;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-import java.util.Map;
 
 public class GUI extends Canvas {
     private final GameConfig gameConfig;
@@ -38,7 +35,7 @@ public class GUI extends Canvas {
             int y = 0;
             while (y < environment.getHeight() - 1) {
                 for (int x = 0; x < environment.getWidth() - 1; x++) {
-                    Cell cell = getCellInGeneration(generation, x, y);
+                    int cell = getCellInGeneration(generation, x, y);
                     fillSquare(g, x, y, cell);
                 }
                 y++;
@@ -54,12 +51,12 @@ public class GUI extends Canvas {
         System.exit(0);
     }
 
-    private void fillSquare(Graphics g, int x, int y, Cell cell) {
-        if (cell.getState() == 1) {
+    private void fillSquare(Graphics g, int x, int y, int cell) {
+        if (cell == 1) {
             if (gameConfig.isUseRandomCellColors()) {
                 g.setColor(pickRandomColor());
             } else {
-                g.setColor(cell.getColor());
+                g.setColor(getColorFromString(gameConfig.getCellColor()));
             }
             g.fillRect(x, y, 1, 1);
         } else {
@@ -68,16 +65,12 @@ public class GUI extends Canvas {
         }
     }
 
-    private List<Map<Coordinates, Cell>> getHistory() {
+    private List<int[][]> getHistory() {
         return environment.getHistory();
     }
 
-    private Map<Coordinates, Cell> getGeneration(int generation) {
-        return getHistory().get(generation);
-    }
-
-    private Cell getCellInGeneration(int generation, int x, int y) {
-        return getGeneration(generation).get(new Coordinates(x, y));
+    private int getCellInGeneration(int generation, int x, int y) {
+        return environment.getHistory().get(generation)[x][y];
     }
 
     private Color getColorFromString(String color) {
@@ -100,17 +93,17 @@ public class GUI extends Canvas {
 
     private Color pickRandomColor() {
         int number = Environment.getNumberBetween(0, 9);
-        switch (number) {
-            case 1: return Color.BLACK;
-            case 2: return Color.RED;
-            case 3: return Color.BLUE;
-            case 4: return Color.GREEN;
-            case 5: return Color.YELLOW;
-            case 6: return Color.MAGENTA;
-            case 7: return Color.PINK;
-            case 8: return Color.CYAN;
-            case 9: return Color.ORANGE;
-            default: return Color.WHITE;
-        }
+        return switch (number) {
+            case 1 -> Color.BLACK;
+            case 2 -> Color.RED;
+            case 3 -> Color.BLUE;
+            case 4 -> Color.GREEN;
+            case 5 -> Color.YELLOW;
+            case 6 -> Color.MAGENTA;
+            case 7 -> Color.PINK;
+            case 8 -> Color.CYAN;
+            case 9 -> Color.ORANGE;
+            default -> Color.WHITE;
+        };
     }
 }
