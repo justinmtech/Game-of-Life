@@ -1,6 +1,12 @@
 # Game of Life
 A customizable re-make of Conway's famous "Game of Life" made in Java. Configurable environment size, cell colors, generation rate, life/death chances and generation seeds!
 
+Dynamic Generator (screenshot)
+![cells](https://user-images.githubusercontent.com/8346060/198699697-83156dba-cd84-4402-beb7-07c8de1f9df8.png)
+Static Generator (screenshot)
+![static](https://user-images.githubusercontent.com/8346060/198701385-26c9658f-8eac-4684-8ff7-7f7cc19f04bd.png)
+
+
 # Setup
 1. Download the release jar file (or clone and build it yourself)
 2. Run the jar file in a terminal with "java -jar {fileName}.jar"
@@ -9,6 +15,13 @@ A customizable re-make of Conway's famous "Game of Life" made in Java. Configura
 # Optional Setup
 - Make a batch or shell script file with "java -jar {fileName}.jar" to easily start/stop the game.
 - Tweak the configuration settings to your liking.
+
+# Generators
+
+- The game has 2 different generators that can be changed in the config.
+- The dynamic setting produces an animated simulation.
+- The static setting produces an image the size of the height and width based on the seed.
+- If using static generator, the seed must be 8 integers.
 
 # Ram Usage
 - The simulation uses a lot of ram (around 1.5 gigs if using a 500x500 generation).
@@ -21,7 +34,7 @@ A customizable re-make of Conway's famous "Game of Life" made in Java. Configura
 - Be aware that some seed generations will either instantly die or not produce anything if the "recipe" for life isn't enough.
 - For life to be sustained there needs to be a balance between 1's and 0's and the space between them.
 
-# Rules of Life
+# Rules of Life (Dynamic Generator)
 - A live cell dies if it has fewer than two live neighbors. 
 - A live cell with two or three live neighbors lives on to the next generation. 
 - A live cell with more than three live neighbors dies. 
@@ -29,6 +42,7 @@ A customizable re-make of Conway's famous "Game of Life" made in Java. Configura
 
 # Configuration 
 - gameTitle: "Game of Life"
+- generator: "DYNAMIC" #DYNAMIC or STATIC
 - updateDelay: 250
 - generationChance: 5
 - useRandomDeathChance: false
