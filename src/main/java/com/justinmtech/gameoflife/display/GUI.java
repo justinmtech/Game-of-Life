@@ -5,7 +5,6 @@ import com.justinmtech.gameoflife.generation.Environment;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 public class GUI extends Canvas {
     private final GameConfig gameConfig;
@@ -29,6 +28,7 @@ public class GUI extends Canvas {
         frame.setVisible(true);
     }
 
+    @SuppressWarnings("BusyWait")
     public void paint(Graphics g) {
         int generation = 0;
         while (generation < environment.getMaxGeneration() - 1) {
@@ -63,10 +63,6 @@ public class GUI extends Canvas {
             g.setColor(getColorFromString(gameConfig.getBackgroundColor()));
             g.fillRect(x, y, 1, 1);
         }
-    }
-
-    private List<int[][]> getHistory() {
-        return environment.getHistory();
     }
 
     private int getCellInGeneration(int generation, int x, int y) {

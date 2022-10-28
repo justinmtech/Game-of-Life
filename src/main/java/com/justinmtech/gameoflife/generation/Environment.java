@@ -36,7 +36,7 @@ public class Environment {
         return gameConfig.getSeed();
     }
 
-    public void run(boolean seed) {
+    public boolean run(boolean seed) {
         if (seed && getSeed() != null) {
             System.out.println("[" + gameConfig.getGameTitle() + "] Now generating game with seed.. [" + Arrays.toString(getSeed()) + "]");
             generateCellsFromSeed();
@@ -45,9 +45,10 @@ public class Environment {
             generateRandomCells();
         }
         loopGameOfLife();
+        return true;
     }
 
-    public void generateRandomCells() {
+    private void generateRandomCells() {
         int y = 0;
         while (y < getHeight() - 1) {
             for (int x = 0; x < getWidth(); x++) {
@@ -60,7 +61,7 @@ public class Environment {
         }
     }
 
-    public void generateCellsFromSeed() {
+    private void generateCellsFromSeed() {
         int y = 0;
         int seedLength = getSeed().length;
         int seedIndex = 0;
@@ -175,7 +176,7 @@ public class Environment {
         setCells(newGeneration);
     }
 
-    public void setCells(int[][] cells) {
+    private void setCells(int[][] cells) {
         this.cells = cells;
     }
 
