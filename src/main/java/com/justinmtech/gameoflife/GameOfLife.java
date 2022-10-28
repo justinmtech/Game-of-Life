@@ -13,12 +13,13 @@ public class GameOfLife {
     public static void main(String[] args) {
         ConfigManager configManager = new ConfigManager();
         GameConfig gameConfig = configManager.getGameConfig();
-        //if (gameConfig.getGenerator().equals(GenerationType.DYNAMIC)) {
+        GenerationType generator = gameConfig.getGenerator();
+        if (generator == GenerationType.DYNAMIC) {
             Environment environment = new Environment(configManager);
             environment.run(gameConfig.isUseSeed());
             GUI gui = new GUI(environment, gameConfig);
             gui.run();
-/*        } else {
+        } else if (generator == GenerationType.STATIC) {
             CellularAutomata ca = new CellularAutomata();
             ca.setHeight(gameConfig.getHeight());
             ca.setWidth(gameConfig.getWidth());
@@ -26,7 +27,7 @@ public class GameOfLife {
             ca.run();
             Drawing draw = new Drawing(ca);
             draw.run(gameConfig.getWidth(), gameConfig.getHeight());
-        }*/
+        }
     }
 }
 
