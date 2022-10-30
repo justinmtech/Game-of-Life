@@ -19,7 +19,7 @@ public class GameConfig {
     private String backgroundColor;
     private String cellColor;
     private boolean useRandomCellColors;
-    private boolean disableGUI;
+    private boolean guiDisabled;
     private boolean showGenerationInConsole;
     private String consoleCellAliveDisplay;
     private String consoleCellDeadDisplay;
@@ -146,12 +146,12 @@ public class GameConfig {
         this.showGenerationInConsole = showGenerationInConsole;
     }
 
-    public boolean isDisableGUI() {
-        return disableGUI;
+    public boolean isGUIDisabled() {
+        return guiDisabled;
     }
 
-    public void setDisableGUI(boolean disableGUI) {
-        this.disableGUI = disableGUI;
+    public void setGuiDisabled(boolean guiDisabled) {
+        this.guiDisabled = guiDisabled;
     }
 
     public String getConsoleCellAliveDisplay() {
@@ -187,7 +187,7 @@ public class GameConfig {
                 "\ncellColor: " + cellColor +
                 "\nuseRandomCellColors: " + useRandomCellColors +
                 "\nshowGenerationInConsole: " + showGenerationInConsole +
-                "\ndisableGUI: " + disableGUI +
+                "\nguiDisabled: " + guiDisabled +
                 "\nconsoleCellAliveDisplay: " + consoleCellAliveDisplay +
                 "\nconsoleCellDeadDisplay: " + consoleCellDeadDisplay +
                 "\ngameTitle: " + gameTitle;

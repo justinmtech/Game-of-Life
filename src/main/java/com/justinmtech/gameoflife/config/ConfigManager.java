@@ -37,7 +37,7 @@ public class ConfigManager {
             config.setRandomDeathChance(100);
             config.setUseRandomDeathChance(false);
             config.setUseRandomCellColors(false);
-            config.setDisableGUI(false);
+            config.setGuiDisabled(false);
             config.setShowGenerationInConsole(false);
             config.setConsoleCellDeadDisplay(" ");
             config.setConsoleCellAliveDisplay("*");

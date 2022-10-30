@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class GameConfigTest {
     private static GameConfig config;
 
@@ -231,20 +229,20 @@ class GameConfigTest {
 
     @Test
     void isDisableGUI() {
-        boolean disableGui = config.isDisableGUI();
+        boolean disableGui = config.isGUIDisabled();
         if (disableGui) {
-            Assertions.assertTrue(config.isDisableGUI());
+            Assertions.assertTrue(config.isGUIDisabled());
         } else {
-            Assertions.assertFalse(config.isDisableGUI());
+            Assertions.assertFalse(config.isGUIDisabled());
         }
     }
 
     @Test
     void setDisableGUI() {
-        config.setDisableGUI(false);
-        Assertions.assertFalse(config.isDisableGUI());
-        config.setDisableGUI(true);
-        Assertions.assertTrue(config.isDisableGUI());
+        config.setGuiDisabled(false);
+        Assertions.assertFalse(config.isGUIDisabled());
+        config.setGuiDisabled(true);
+        Assertions.assertTrue(config.isGUIDisabled());
     }
 
     @Test

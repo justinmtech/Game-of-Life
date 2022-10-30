@@ -32,11 +32,11 @@ public class Environment {
         return history;
     }
 
-    private int[] getSeed() {
-        return gameConfig.getSeed();
+    public int getMaxGeneration() {
+        return gameConfig.getMaxGeneration();
     }
 
-    public boolean run(boolean seed) {
+    public boolean runEnvironmentSimulation(boolean seed) {
         if (seed && getSeed() != null) {
             System.out.println("[" + gameConfig.getGameTitle() + "] Now generating game with seed.. [" + Arrays.toString(getSeed()) + "]");
             generateCellsFromSeed();
@@ -44,21 +44,8 @@ public class Environment {
             System.out.println("[" + gameConfig.getGameTitle() + "] Now generating game with chance.." + " [cell chance: " + gameConfig.getGenerationChance() + "]");
             generateRandomCells();
         }
-        loopGameOfLife();
+        loopSimulationUntilMaxGenerations();
         return true;
-    }
-
-    private void generateRandomCells() {
-        int y = 0;
-        while (y < getHeight() - 1) {
-            for (int x = 0; x < getWidth(); x++) {
-                int max = getNumberBetween(1, gameConfig.getGenerationChance());
-                int r = getNumberBetween(0, max);
-                if (r == 1) setCellState(x, y, 1);
-                else setCellState(x, y, 0);
-            }
-            y++;
-        }
     }
 
     private void generateCellsFromSeed() {
@@ -78,6 +65,27 @@ public class Environment {
         }
     }
 
+    private void generateRandomCells() {
+        int y = 0;
+        while (y < getHeight() - 1) {
+            for (int x = 0; x < getWidth(); x++) {
+                int max = getNumberBetween(1, gameConfig.getGenerationChance());
+                int r = getNumberBetween(0, max);
+                if (r == 1) setCellState(x, y, 1);
+                else setCellState(x, y, 0);
+            }
+            y++;
+        }
+    }
+
+    private int[][] getCells() {
+        return cells;
+    }
+
+    private int[] getSeed() {
+        return gameConfig.getSeed();
+    }
+
     public static int getNumberBetween(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
     }
@@ -91,7 +99,7 @@ public class Environment {
         int[] newLine = new int[getWidth()];
         int prev = y - 1;
         for (int x = 1; x < getWidth(); x++) {
-            newLine[x] = getLifeOrDeath(getCell(x, prev), getNeighborCells(prev, x));
+            newLine[x] = getNewStateOfCurrentCell(getCell(x, prev), getNeighborCells(prev, x));
         }
         return newLine;
     }
@@ -110,29 +118,29 @@ public class Environment {
 
 
     private int[][] generateNextEnvironment() {
-        int[][] newEnvironment = new int[getWidth()][getHeight()];
+        int[][] nextEnvironment = new int[getWidth()][getHeight()];
         for (int y = 1; y < getHeight() - 1; y++) {
             int[] line = generateLineOfCellsAtY(y);
             for (int x = 0; x < getWidth(); x++) {
-                newEnvironment[x][y - 1] = line[x];
+                nextEnvironment[x][y - 1] = line[x];
             }
         }
-        return newEnvironment;
+        return nextEnvironment;
     }
 
     private void printCellsToConsole() {
         int y = 0;
-        printGeneration();
+        printGenerationCount();
         while (y < getHeight() - 1) {
             for (int x = 0; x < getWidth(); x++) {
-                printIndividualCell(getCell(x, y));
+                printCellFromState(getCell(x, y));
             }
             printEmptyLine();
             y++;
         }
     }
 
-    private void printGeneration() {
+    private void printGenerationCount() {
         System.out.println("[" + gameConfig.getGameTitle() + "] Generation: " + getGeneration() + "/" + getMaxGeneration());
     }
 
@@ -140,16 +148,16 @@ public class Environment {
         System.out.println();
     }
 
-    private String getCellDisplay(int state) {
+    private String getCellDisplayFromState(int state) {
         if (state == 1) return gameConfig.getConsoleCellAliveDisplay();
         else return gameConfig.getConsoleCellDeadDisplay();
     }
 
-    private void printIndividualCell(int state) {
-        System.out.print(getCellDisplay(state));
+    private void printCellFromState(int state) {
+        System.out.print(getCellDisplayFromState(state));
     }
 
-    private void loopGameOfLife() {
+    private void loopSimulationUntilMaxGenerations() {
         if (gameConfig.isShowGenerationInConsole()) printCellsToConsole();
         while (generation < getMaxGeneration()) {
             int[][] newEnvironment = generateNextEnvironment();
@@ -186,7 +194,7 @@ public class Environment {
         return lifeCounter;
     }
 
-    private int getLifeOrDeath(int cell, int[] neighbors) {
+    private int getNewStateOfCurrentCell(int cell, int[] neighbors) {
         int lifeCounter = getLiveCellsFromNeighbors(neighbors);
         int randomDeathChance = getNumberBetween(0, gameConfig.getRandomDeathChance());
 
@@ -219,11 +227,4 @@ public class Environment {
         this.history.add(environment);
     }
 
-    private int[][] getCells() {
-        return cells;
-    }
-
-    public int getMaxGeneration() {
-        return gameConfig.getMaxGeneration();
-    }
 }

@@ -19,10 +19,10 @@ public class GUI extends Canvas {
 
     public void run() {
         System.out.println("[" + gameConfig.getGameTitle() + "] GUI opening...");
-        JFrame frame = new JFrame(gameConfig.getGameTitle());
         Canvas canvas = new GUI(environment, gameConfig);
         canvas.setSize(environment.getWidth(), environment.getHeight());
-        canvas.setBackground(getColorFromString(gameConfig.getBackgroundColor()));
+        canvas.setBackground(getGUIColorFromString(gameConfig.getBackgroundColor()));
+        JFrame frame = new JFrame(gameConfig.getGameTitle());
         frame.add(canvas);
         frame.pack();
         frame.setVisible(true);
@@ -52,24 +52,23 @@ public class GUI extends Canvas {
     }
 
     private void fillSquare(Graphics g, int x, int y, int cell) {
-        if (cell == 1) {
-            if (gameConfig.isUseRandomCellColors()) {
-                g.setColor(pickRandomColor());
-            } else {
-                g.setColor(getColorFromString(gameConfig.getCellColor()));
-            }
-            g.fillRect(x, y, 1, 1);
-        } else {
-            g.setColor(getColorFromString(gameConfig.getBackgroundColor()));
-            g.fillRect(x, y, 1, 1);
+        if (cell < 0 || cell > 1) return;
+        switch (cell) {
+            case 1:
+                if (gameConfig.isUseRandomCellColors()) g.setColor(getRandomGUIColor());
+                else g.setColor(getGUIColorFromString(gameConfig.getCellColor()));
+                break;
+            case 0:
+                g.setColor(getGUIColorFromString(gameConfig.getBackgroundColor()));
         }
+        g.fillRect(x, y, 1, 1);
     }
 
     private int getCellInGeneration(int generation, int x, int y) {
         return environment.getHistory().get(generation)[x][y];
     }
 
-    private Color getColorFromString(String color) {
+    private Color getGUIColorFromString(String color) {
         return switch (color.toUpperCase()) {
             case "BLACK" -> Color.BLACK;
             case "RED" -> Color.RED;
@@ -87,7 +86,7 @@ public class GUI extends Canvas {
         };
     }
 
-    private Color pickRandomColor() {
+    private Color getRandomGUIColor() {
         int number = Environment.getNumberBetween(0, 9);
         return switch (number) {
             case 1 -> Color.BLACK;

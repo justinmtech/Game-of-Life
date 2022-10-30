@@ -16,7 +16,7 @@ public class GameOfLife {
         GenerationType generator = gameConfig.getGenerator();
         if (generator == GenerationType.DYNAMIC) {
             Environment environment = new Environment(configManager);
-            environment.run(gameConfig.isUseSeed());
+            environment.runEnvironmentSimulation(gameConfig.isUseSeed());
             GUI gui = new GUI(environment, gameConfig);
             gui.run();
         } else if (generator == GenerationType.STATIC) {

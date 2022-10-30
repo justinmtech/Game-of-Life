@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.justinmtech</groupId>
-    <artifactId>GameOfLife</artifactId>
-    <version>0.5</version>
+    <artifactId>Game-of-Life</artifactId>
+    <version>0.6</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

@@ -47,8 +47,8 @@ class EnvironmentTest {
 
     @Test
     void environmentRunsSuccessfully() {
-        Assertions.assertTrue(environment.run(true));
-        Assertions.assertTrue(environment.run(false));
+        Assertions.assertTrue(environment.runEnvironmentSimulation(true));
+        Assertions.assertTrue(environment.runEnvironmentSimulation(false));
     }
 
 }
