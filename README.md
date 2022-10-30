@@ -1,5 +1,5 @@
 # Game of Life
-A customizable re-make of Conway's famous "Game of Life" made in Java. Configurable environment size, cell colors, generation rate, life/death chances and generation seeds!
+A cellular automata simulator with both animated and dynamic renders. Configurable environment size, cell colors, generation rate, life/death chances and generation seeds!
 
 Dynamic Generator (screenshot)
 ![cells](https://user-images.githubusercontent.com/8346060/198699697-83156dba-cd84-4402-beb7-07c8de1f9df8.png)
