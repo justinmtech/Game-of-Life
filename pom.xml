@@ -6,12 +6,37 @@
 
     <groupId>com.justinmtech</groupId>
     <artifactId>Game-of-Life</artifactId>
-    <version>0.6</version>
+    <version>0.7</version>
+
+    <name>Game of Life</name>
+    <description>Simulate cell life and create art from seeds.</description>
+    <url>https://github.com/justinmtech/Aqua</url>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
+
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/justinmtech/Game-of-Life/issues</url>
+    </issueManagement>
+
+    <developers>
+        <developer>
+            <name>Justin</name>
+            <email>contact@justinmtech.com</email>
+            <url>https://github.com/justinmtech</url>
+        </developer>
+    </developers>
 
     <build>
         <plugins>
