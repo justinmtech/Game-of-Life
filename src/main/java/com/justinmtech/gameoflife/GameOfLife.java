@@ -8,9 +8,11 @@ import com.justinmtech.gameoflife.display.GUI;
 import com.justinmtech.gameoflife.generation.Environment;
 import com.justinmtech.gameoflife.generation.GenerationType;
 
+import javax.naming.ConfigurationException;
+
 public class GameOfLife {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ConfigurationException {
         ConfigManager configManager = new ConfigManager();
         GameConfig gameConfig = configManager.getGameConfig();
         System.out.println(gameConfig.toString());
@@ -24,6 +26,9 @@ public class GameOfLife {
             CellularAutomata ca = new CellularAutomata();
             ca.setHeight(gameConfig.getHeight());
             ca.setWidth(gameConfig.getWidth());
+            if (gameConfig.getSeed().length != 8) {
+                throw new ConfigurationException("The seed must be 8 integers long for static generations.");
+            }
             ca.setSeed(gameConfig.getSeed());
             ca.run();
             Drawing draw = new Drawing(ca);
