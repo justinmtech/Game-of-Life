@@ -37,13 +37,13 @@ public class ConfigManager {
             config.setRandomDeathChance(100);
             config.setUseRandomDeathChance(false);
             config.setUseRandomCellColors(false);
-            config.setGuiDisabled(false);
             config.setShowGenerationInConsole(false);
+            config.setGuiDisabled(false);
             config.setConsoleCellDeadDisplay(" ");
             config.setConsoleCellAliveDisplay("*");
             ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
             try {
-                objectMapper.writeValue(new File("config.yaml"), config);
+                objectMapper.writeValue(file, config);
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();

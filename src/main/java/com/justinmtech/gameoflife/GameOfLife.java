@@ -13,6 +13,7 @@ public class GameOfLife {
     public static void main(String[] args) {
         ConfigManager configManager = new ConfigManager();
         GameConfig gameConfig = configManager.getGameConfig();
+        System.out.println(gameConfig.toString());
         GenerationType generator = gameConfig.getGenerator();
         if (generator == GenerationType.DYNAMIC) {
             Environment environment = new Environment(configManager);

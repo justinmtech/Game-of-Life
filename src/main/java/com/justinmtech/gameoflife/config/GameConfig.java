@@ -1,5 +1,6 @@
 package com.justinmtech.gameoflife.config;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.justinmtech.gameoflife.generation.GenerationType;
 
 import java.util.Arrays;
@@ -19,10 +20,11 @@ public class GameConfig {
     private String backgroundColor;
     private String cellColor;
     private boolean useRandomCellColors;
-    private boolean guiDisabled;
     private boolean showGenerationInConsole;
     private String consoleCellAliveDisplay;
     private String consoleCellDeadDisplay;
+    @JsonProperty("guiDisabled")
+    private boolean guiDisabled;
 
     public GameConfig() {}
 
@@ -146,6 +148,7 @@ public class GameConfig {
         this.showGenerationInConsole = showGenerationInConsole;
     }
 
+    @JsonProperty("guiDisabled")
     public boolean isGUIDisabled() {
         return guiDisabled;
     }
@@ -172,8 +175,7 @@ public class GameConfig {
 
     @Override
     public String toString() {
-        return "#generator types static/dynamic" +
-                "\ngenerator: " + generator +
+        return  "\ngenerator: " + generator +
                 "\nupdateDelay: " + updateDelay +
                 "\ngenerationChance: " + generationChance +
                 "\nmaxGenerations: " + maxGeneration +
@@ -187,9 +189,9 @@ public class GameConfig {
                 "\ncellColor: " + cellColor +
                 "\nuseRandomCellColors: " + useRandomCellColors +
                 "\nshowGenerationInConsole: " + showGenerationInConsole +
-                "\nguiDisabled: " + guiDisabled +
                 "\nconsoleCellAliveDisplay: " + consoleCellAliveDisplay +
                 "\nconsoleCellDeadDisplay: " + consoleCellDeadDisplay +
-                "\ngameTitle: " + gameTitle;
+                "\ngameTitle: " + gameTitle +
+                "\nguiDisabled: " + guiDisabled;
     }
 }
