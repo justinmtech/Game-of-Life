@@ -10,7 +10,7 @@
 
     <name>Game of Life</name>
     <description>Simulate cell life and create art from seeds.</description>
-    <url>https://github.com/justinmtech/Aqua</url>
+    <url>https://github.com/justinmtech/Game-of-Life</url>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
