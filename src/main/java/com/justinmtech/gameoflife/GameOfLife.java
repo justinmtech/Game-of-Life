@@ -1,7 +1,7 @@
 package com.justinmtech.gameoflife;
 
-import com.justinmtech.cellularautomata.CellularAutomata;
-import com.justinmtech.cellularautomata.Drawing;
+import com.justinmtech.gameoflife.cellularautomata.CellularAutomata;
+import com.justinmtech.gameoflife.cellularautomata.Drawing;
 import com.justinmtech.gameoflife.config.ConfigManager;
 import com.justinmtech.gameoflife.config.GameConfig;
 import com.justinmtech.gameoflife.display.GUI;
