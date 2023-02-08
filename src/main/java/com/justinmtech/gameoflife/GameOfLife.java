@@ -20,7 +20,6 @@ public class GameOfLife {
             Environment environment = new Environment(configManager);
             Thread environmentThread = new Thread(environment);
             environmentThread.start();
-
             GUI gui = new GUI(environment, gameConfig);
             Thread guiThread = new Thread(gui);
             guiThread.start();

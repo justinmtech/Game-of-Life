@@ -3,9 +3,7 @@ package com.justinmtech.gameoflife.generation;
 import com.justinmtech.gameoflife.config.ConfigManager;
 import com.justinmtech.gameoflife.config.GameConfig;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Environment implements Runnable {
     private final GameConfig gameConfig;

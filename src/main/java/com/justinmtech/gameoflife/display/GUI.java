@@ -5,6 +5,7 @@ import com.justinmtech.gameoflife.generation.Environment;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class GUI extends Canvas implements Runnable {
     private final GameConfig gameConfig;
