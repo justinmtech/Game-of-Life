@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Environment {
+public class Environment implements Runnable {
     private final GameConfig gameConfig;
     private int generation;
     private int[][] cells;
@@ -227,4 +227,8 @@ public class Environment {
         this.history.add(environment);
     }
 
+    @Override
+    public void run() {
+        runEnvironmentSimulation(gameConfig.isUseSeed());
+    }
 }

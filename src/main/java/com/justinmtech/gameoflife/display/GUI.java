@@ -6,7 +6,7 @@ import com.justinmtech.gameoflife.generation.Environment;
 import javax.swing.*;
 import java.awt.*;
 
-public class GUI extends Canvas {
+public class GUI extends Canvas implements Runnable {
     private final GameConfig gameConfig;
     private final Environment environment;
     private final int delay;

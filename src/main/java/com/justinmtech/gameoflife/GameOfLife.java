@@ -18,9 +18,12 @@ public class GameOfLife {
         GenerationType generator = gameConfig.getGenerator();
         if (generator == GenerationType.DYNAMIC) {
             Environment environment = new Environment(configManager);
-            environment.runEnvironmentSimulation(gameConfig.isUseSeed());
+            Thread environmentThread = new Thread(environment);
+            environmentThread.start();
+
             GUI gui = new GUI(environment, gameConfig);
-            gui.run();
+            Thread guiThread = new Thread(gui);
+            guiThread.start();
         } else if (generator == GenerationType.STATIC) {
             CellularAutomata ca = new CellularAutomata();
             ca.setHeight(gameConfig.getHeight());
