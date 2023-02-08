@@ -25,6 +25,7 @@ public class GameConfig {
     private String consoleCellDeadDisplay;
     @JsonProperty("guiDisabled")
     private boolean guiDisabled;
+    private boolean playInReverse;
 
     public GameConfig() {}
 
@@ -173,6 +174,14 @@ public class GameConfig {
         this.consoleCellDeadDisplay = consoleCellDeadDisplay;
     }
 
+    public boolean isPlayInReverse() {
+        return playInReverse;
+    }
+
+    public void setPlayInReverse(boolean playInReverse) {
+        this.playInReverse = playInReverse;
+    }
+
     @Override
     public String toString() {
         return  "\ngenerator: " + generator +
@@ -192,6 +201,7 @@ public class GameConfig {
                 "\nconsoleCellAliveDisplay: " + consoleCellAliveDisplay +
                 "\nconsoleCellDeadDisplay: " + consoleCellDeadDisplay +
                 "\ngameTitle: " + gameTitle +
-                "\nguiDisabled: " + guiDisabled;
+                "\nguiDisabled: " + guiDisabled +
+                "\nplayInReverse: " + playInReverse;
     }
 }

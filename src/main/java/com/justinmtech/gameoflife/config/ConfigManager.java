@@ -41,6 +41,7 @@ public class ConfigManager {
             config.setGuiDisabled(false);
             config.setConsoleCellDeadDisplay(" ");
             config.setConsoleCellAliveDisplay("*");
+            config.setPlayInReverse(true);
             ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
             try {
                 objectMapper.writeValue(file, config);

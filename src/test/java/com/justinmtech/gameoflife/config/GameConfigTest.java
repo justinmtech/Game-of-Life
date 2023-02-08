@@ -270,4 +270,18 @@ class GameConfigTest {
         config.setConsoleCellDeadDisplay(newDeadCell);
         Assertions.assertEquals(newDeadCell, config.getConsoleCellDeadDisplay());
     }
+
+    @Test
+    void isPlayInReverse() {
+        boolean isReversed = config.isPlayInReverse();
+        Assertions.assertEquals(isReversed, config.isPlayInReverse());
+    }
+
+    @Test
+    void setPlayInReverse() {
+        config.setPlayInReverse(true);
+        Assertions.assertTrue(config.isPlayInReverse());
+        config.setPlayInReverse(false);
+        Assertions.assertFalse(config.isPlayInReverse());
+    }
 }

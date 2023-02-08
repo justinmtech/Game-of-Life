@@ -5,7 +5,6 @@ import com.justinmtech.gameoflife.generation.Environment;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
 
 public class GUI extends Canvas implements Runnable {
     private final GameConfig gameConfig;
@@ -19,7 +18,7 @@ public class GUI extends Canvas implements Runnable {
     }
 
     public void run() {
-        System.out.println("[" + gameConfig.getGameTitle() + "] GUI opening...");
+        guiOpening();
         Canvas canvas = new GUI(environment, gameConfig);
         canvas.setSize(environment.getWidth(), environment.getHeight());
         canvas.setBackground(getGUIColorFromString(gameConfig.getBackgroundColor()));
@@ -29,8 +28,19 @@ public class GUI extends Canvas implements Runnable {
         frame.setVisible(true);
     }
 
-    @SuppressWarnings("BusyWait")
     public void paint(Graphics g) {
+        if (!gameConfig.isPlayInReverse()) {
+            playNormal(g);
+        } else {
+            playInReverse(g);
+        }
+    }
+
+    private void guiOpening() {
+        System.out.println("[" + gameConfig.getGameTitle() + "] GUI opening...");
+    }
+
+    private void playNormal(Graphics g) {
         int generation = 0;
         while (generation < environment.getMaxGeneration() - 1) {
             int y = 0;
@@ -41,13 +51,38 @@ public class GUI extends Canvas implements Runnable {
                 }
                 y++;
             }
-            try {
-                Thread.sleep(delay);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            triggerDelay();
             generation++;
         }
+        finish();
+    }
+
+    private void playInReverse(Graphics g) {
+        int generation = environment.getMaxGeneration() - 2;
+        while (generation > 0) {
+            int y = environment.getHeight() - 1;
+            while (y > 0) {
+                for (int x = environment.getWidth() - 1; x > 0; x--) {
+                    int cell = getCellInGeneration(generation, x, y);
+                    fillSquare(g, x, y, cell);
+                }
+                y--;
+            }
+            triggerDelay();
+            generation--;
+        }
+        finish();
+    }
+
+    private void triggerDelay() {
+        try {
+            Thread.sleep(delay);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void finish() {
         System.out.println("[" + gameConfig.getGameTitle() + "] Simulation complete!");
         System.exit(0);
     }

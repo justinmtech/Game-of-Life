@@ -12,7 +12,7 @@ import javax.naming.ConfigurationException;
 
 public class GameOfLife {
 
-    public static void main(String[] args) throws ConfigurationException {
+    public static void main(String[] args) throws ConfigurationException, InterruptedException {
         ConfigManager configManager = new ConfigManager();
         GameConfig gameConfig = configManager.getGameConfig();
         GenerationType generator = gameConfig.getGenerator();
@@ -22,7 +22,13 @@ public class GameOfLife {
             environmentThread.start();
             GUI gui = new GUI(environment, gameConfig);
             Thread guiThread = new Thread(gui);
-            guiThread.start();
+            if (gameConfig.isPlayInReverse()) {
+                System.out.println("[" + gameConfig.getGameTitle() + "] Playing in reverse.. Please wait while the environment generates.");
+                environmentThread.join();
+                guiThread.start();
+            } else {
+                guiThread.start();
+            }
         } else if (generator == GenerationType.STATIC) {
             CellularAutomata ca = new CellularAutomata();
             ca.setHeight(gameConfig.getHeight());
