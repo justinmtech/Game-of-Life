@@ -78,6 +78,7 @@
                 </executions>
             </plugin>
         </plugins>
+        <finalName>Game-of-Life</finalName>
     </build>
 
     <dependencies>
