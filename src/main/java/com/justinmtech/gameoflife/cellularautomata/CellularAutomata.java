@@ -1,5 +1,7 @@
 package com.justinmtech.gameoflife.cellularautomata;
 
+import com.justinmtech.gameoflife.config.GameConfig;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,13 +13,14 @@ public class CellularAutomata {
     private final List<int[]> cellHistory;
     private int width;
     private int[] seed;
+    private GameConfig config;
 
-    public CellularAutomata() {
+    public CellularAutomata(GameConfig config) {
         generation = 1;
-        this.height = 500;
-        this.width = 500;
+        this.height = config.getHeight();
+        this.width = config.getWidth();
         this.cells = new int[width];
-        this.seed = new int[]{0,1,0,0,1,0,1,1};
+        this.seed = config.getSeed();
         Arrays.fill(cells, 0);
         this.cells[width/2] = 1;
         this.cellHistory = new ArrayList<>();
@@ -96,5 +99,13 @@ public class CellularAutomata {
 
     public void setSeed(int[] seed) {
         this.seed = seed;
+    }
+
+    public GameConfig getConfig() {
+        return config;
+    }
+
+    public void setConfig(GameConfig config) {
+        this.config = config;
     }
 }

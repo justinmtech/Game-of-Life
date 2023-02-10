@@ -30,15 +30,12 @@ public class GameOfLife {
                 guiThread.start();
             }
         } else if (generator == GenerationType.STATIC) {
-            CellularAutomata ca = new CellularAutomata();
-            ca.setHeight(gameConfig.getHeight());
-            ca.setWidth(gameConfig.getWidth());
+            CellularAutomata ca = new CellularAutomata(gameConfig);
             if (gameConfig.getSeed().length != 8) {
                 throw new ConfigurationException("The seed must be 8 integers long for static generations.");
             }
-            ca.setSeed(gameConfig.getSeed());
             ca.run();
-            Drawing draw = new Drawing(ca);
+            Drawing draw = new Drawing(ca, gameConfig);
             draw.run(gameConfig.getWidth(), gameConfig.getHeight());
         }
     }

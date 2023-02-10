@@ -104,7 +104,7 @@ public class GUI extends Canvas implements Runnable {
         return environment.getHistory().get(generation)[x][y];
     }
 
-    private Color getGUIColorFromString(String color) {
+    public static Color getGUIColorFromString(String color) {
         return switch (color.toUpperCase()) {
             case "BLACK" -> Color.BLACK;
             case "RED" -> Color.RED;
@@ -122,7 +122,7 @@ public class GUI extends Canvas implements Runnable {
         };
     }
 
-    private Color getRandomGUIColor() {
+    public static Color getRandomGUIColor() {
         int number = Environment.getNumberBetween(0, 9);
         return switch (number) {
             case 1 -> Color.BLACK;
