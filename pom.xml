@@ -6,7 +6,7 @@
 
     <groupId>com.justinmtech</groupId>
     <artifactId>Game-of-Life</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
 
     <name>Game of Life</name>
     <description>Simulate cell life and create art from seeds.</description>

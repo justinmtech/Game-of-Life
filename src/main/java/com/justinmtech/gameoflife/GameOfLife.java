@@ -1,10 +1,10 @@
 package com.justinmtech.gameoflife;
 
 import com.justinmtech.gameoflife.cellularautomata.CellularAutomata;
-import com.justinmtech.gameoflife.cellularautomata.Drawing;
+import com.justinmtech.gameoflife.cellularautomata.StaticDisplay;
 import com.justinmtech.gameoflife.config.ConfigManager;
 import com.justinmtech.gameoflife.config.GameConfig;
-import com.justinmtech.gameoflife.display.GUI;
+import com.justinmtech.gameoflife.display.DynamicDisplay;
 import com.justinmtech.gameoflife.generation.Environment;
 import com.justinmtech.gameoflife.generation.GenerationType;
 
@@ -20,7 +20,7 @@ public class GameOfLife {
             Environment environment = new Environment(configManager);
             Thread environmentThread = new Thread(environment);
             environmentThread.start();
-            GUI gui = new GUI(environment, gameConfig);
+            DynamicDisplay gui = new DynamicDisplay(environment, gameConfig);
             Thread guiThread = new Thread(gui);
             if (gameConfig.isPlayInReverse()) {
                 System.out.println("[" + gameConfig.getGameTitle() + "] Playing in reverse.. Please wait while the environment generates.");
@@ -30,13 +30,13 @@ public class GameOfLife {
                 guiThread.start();
             }
         } else if (generator == GenerationType.STATIC) {
-            CellularAutomata ca = new CellularAutomata(gameConfig);
             if (gameConfig.getSeed().length != 8) {
                 throw new ConfigurationException("The seed must be 8 integers long for static generations.");
             }
+            CellularAutomata ca = new CellularAutomata(gameConfig);
             ca.run();
-            Drawing draw = new Drawing(ca, gameConfig);
-            draw.run(gameConfig.getWidth(), gameConfig.getHeight());
+            StaticDisplay draw = new StaticDisplay(ca, gameConfig);
+            draw.run();
         }
     }
 }

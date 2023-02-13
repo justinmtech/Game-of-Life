@@ -5,13 +5,14 @@ import com.justinmtech.gameoflife.generation.Environment;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
-public class GUI extends Canvas implements Runnable {
+public class DynamicDisplay extends Canvas implements Runnable {
     private final GameConfig gameConfig;
     private final Environment environment;
     private final int delay;
 
-    public GUI(Environment environment, GameConfig gameConfig) {
+    public DynamicDisplay(Environment environment, GameConfig gameConfig) {
         this.gameConfig = gameConfig;
         this.environment = environment;
         this.delay = gameConfig.getUpdateDelay();
@@ -19,13 +20,22 @@ public class GUI extends Canvas implements Runnable {
 
     public void run() {
         guiOpening();
-        Canvas canvas = new GUI(environment, gameConfig);
+        Canvas canvas = new DynamicDisplay(environment, gameConfig);
         canvas.setSize(environment.getWidth(), environment.getHeight());
         canvas.setBackground(getGUIColorFromString(gameConfig.getBackgroundColor()));
         JFrame frame = new JFrame(gameConfig.getGameTitle());
+        setIcons(frame);
         frame.add(canvas);
         frame.pack();
         frame.setVisible(true);
+    }
+
+    public static void setIcons(JFrame frame) {
+        frame.setIconImages(List.of(getIcon("icon-small.png"), getIcon("icon-large.png")));
+    }
+
+    private static Image getIcon(String file) {
+        return Toolkit.getDefaultToolkit().getImage(file);
     }
 
     public void paint(Graphics g) {

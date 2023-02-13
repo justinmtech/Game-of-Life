@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
         CellularAutomata ca = new CellularAutomata(config);
-        Drawing draw = new Drawing(ca, ca.getConfig());
-        draw.run(500, 500);
+        StaticDisplay draw = new StaticDisplay(ca, ca.getConfig());
+        draw.run();
     }
 }

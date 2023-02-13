@@ -1,25 +1,26 @@
 package com.justinmtech.gameoflife.cellularautomata;
 
 import com.justinmtech.gameoflife.config.GameConfig;
-import com.justinmtech.gameoflife.display.GUI;
+import com.justinmtech.gameoflife.display.DynamicDisplay;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class Drawing extends Canvas {
+public class StaticDisplay extends Canvas {
     private final CellularAutomata cellularAutomata;
     private final GameConfig config;
 
-    public Drawing(CellularAutomata cellularAutomata, GameConfig config) {
+    public StaticDisplay(CellularAutomata cellularAutomata, GameConfig config) {
         this.cellularAutomata = cellularAutomata;
         this.config = config;
     }
 
-    public void run(int width, int height) {
-        JFrame frame = new JFrame("Cellular Automata");
-        Canvas canvas = new Drawing(cellularAutomata, config);
-        canvas.setSize(width, height);
+    public void run() {
+        JFrame frame = new JFrame(config.getGameTitle());
+        DynamicDisplay.setIcons(frame);
+        Canvas canvas = new StaticDisplay(cellularAutomata, config);
+        canvas.setSize(config.getWidth(), config.getHeight());
         frame.add(canvas);
         frame.pack();
         frame.setVisible(true);
@@ -37,16 +38,16 @@ public class Drawing extends Canvas {
         for (int j = 0; j < cells.length; j++) {
             if (cells[j] == 1) {
                 if (!config.isUseRandomCellColors()) {
-                    g.setColor(GUI.getGUIColorFromString(config.getCellColor()));
+                    g.setColor(DynamicDisplay.getGUIColorFromString(config.getCellColor()));
                 } else {
-                    g.setColor(GUI.getRandomGUIColor());
+                    g.setColor(DynamicDisplay.getRandomGUIColor());
                 }
                 g.fillRect(j, i, 1, 1);
             } else {
                 if (!config.isUseRandomCellColors()) {
-                    g.setColor(GUI.getGUIColorFromString(config.getBackgroundColor()));
+                    g.setColor(DynamicDisplay.getGUIColorFromString(config.getBackgroundColor()));
                 } else {
-                    g.setColor(GUI.getRandomGUIColor());
+                    g.setColor(DynamicDisplay.getRandomGUIColor());
                 }
                 g.fillRect(j, i, 1, 1);
             }
