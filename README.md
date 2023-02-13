@@ -12,6 +12,9 @@ Static Generator (screenshot)
 2. Run the jar file in a terminal with "java -jar {fileName}.jar"
 3. Let the game generate, then enjoy the simulation!
 
+# Requirements
+1. You must have Java 17 or higher to run this program
+
 # Optional Setup
 - Make a batch or shell script file with "java -jar {fileName}.jar" to easily start/stop the game.
 - Tweak the configuration settings to your liking.
